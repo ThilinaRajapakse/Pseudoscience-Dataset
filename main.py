@@ -83,8 +83,8 @@ def patch_pyppeteer():
 
 patch_pyppeteer()
 
-sites = ['thinkingmomsrevolution', 'snopes', 'pnas']
+sites = [site[:-9] for site in os.listdir('links')]
 
 
-with ThreadPoolExecutor(3) as executor:
+with ThreadPoolExecutor(20) as executor:
     results = executor.map(scrape_site, sites)
