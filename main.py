@@ -49,6 +49,8 @@ def scrape_site(site):
             data['text'].append(text)
             data['site'].append(site)
             scraped.add(url)
+        except IndexError as e:
+            scraped.add(url)
         except Exception as e:
             print(e)
         if i % checkpoint_steps == 0 and i > 0:
@@ -86,5 +88,5 @@ patch_pyppeteer()
 sites = [site[:-9] for site in os.listdir('links')]
 
 
-with ThreadPoolExecutor(20) as executor:
+with ThreadPoolExecutor(3) as executor:
     results = executor.map(scrape_site, sites)
