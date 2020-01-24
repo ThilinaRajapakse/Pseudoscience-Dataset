@@ -7,6 +7,7 @@ import pandas as pd
 import json
 import sys
 from tqdm.auto import tqdm
+import time
 
 
 checkpoint_steps = 100
@@ -44,21 +45,24 @@ def scrape_site(site):
     print(f'{site} scraping initiated!')
     for i, url in enumerate(tqdm(to_scrape)):
         try:
-            title, text = scrape_page(url, selectors[site], session)
+            title, text = scrape_page(url, selectors[site], session, site)
             data['title'].append(title)
             data['text'].append(text)
             data['site'].append(site)
             scraped.add(url)
         except IndexError as e:
             scraped.add(url)
+        except ValueError as e:
+            pass
         except Exception as e:
             print(e)
+            print(site)
         if i % checkpoint_steps == 0 and i > 0:
             with open(save_dir + 'data.json', 'w') as f:
                 json.dump(data, f)
             with open(save_dir + 'scraped_urls.txt', 'w') as f:
                 f.writelines(scraped)
-            print(f'{site}: {i} of {len(to_scrape)} done.')
+            # print(f'{site}: {i} of {len(to_scrape)} done.')
 
     data_df = pd.DataFrame(data)
     data_df.to_csv(save_dir + 'data_all.tsv', sep='\t', index=False)
@@ -85,8 +89,14 @@ def patch_pyppeteer():
 
 patch_pyppeteer()
 
-sites = [site[:-9] for site in os.listdir('links')]
-
-
-with ThreadPoolExecutor(3) as executor:
+sites = [site[:-9] for site in os.listdir('links') if 'greggbraden' not in site and 'goop' not in site]
+start = time.time()
+with ThreadPoolExecutor(18) as executor:
     results = executor.map(scrape_site, sites)
+end = time.time()
+time_elapsed = end - start
+
+print(f"Scraping completed in {time_elapsed}")
+
+with open('time_elapsed.txt', 'w') as f:
+    f.write(str(time_elapsed))

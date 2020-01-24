@@ -4,7 +4,7 @@ selectors = {
     'smithsonian': ('#Page-Content > main > header > h1', '#Page-Content > main > div.article-body.pagination-first > p:nth-child(n)', None, None, None, False),
     'collectiveevolution': ('#mvp-post-head > h1', '#mvp-content-main > p:nth-child(n)', None, None, None, False),
     'danachild': ('div.et_post_meta_wrapper > h1', '#et-boc > div > div > div > div > div > div > p:nth-child(n),div.entry-content > p:nth-child(n),div.entry-content > ul:nth-child(n)', None, None, None, False),
-    'davidwolfe': ('h1.entry-title1', '[itemprop="articleBody"] > span > p:nth-child(n),[itemprop="articleBody"] > p:nth-child(n)', 'References:', None, None, None, False),
+    'davidwolfe': ('h1.entry-title1', '[itemprop="articleBody"] > span > p:nth-child(n),[itemprop="articleBody"] > p:nth-child(n)', 'References:', None, None, False),
     'factcheck': ('h1.entry-title1', 'div.entry-content > p:nth-child(n),div.entry-content > ul:nth-child(n),div.entry-content > blockquote:nth-child(n)', None, None, None, False),
     'foodbabe': ('body > div.wrap.container > div > main > article > header > h1', 'body > div.wrap.container > div > main > article > div.entry-content > p:nth-child(n)', None, ['xo, vani'], None, False),
     'gizmodo': ('body > div  header > h1 > a', 'body > div:nth-child(n) > div  > main > div > div > div > p:nth-child(n)', None, None, None, False),

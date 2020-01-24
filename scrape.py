@@ -1,16 +1,30 @@
 from unicodedata import normalize
 
 
-def scrape_page(url, selector, session):
+def is_goop_post(url):
+    title = url.split('/')[-2]
+    try:
+        int(title)
+        return False
+    except Exception as e:
+        return title
+
+
+def scrape_page(url, selector, session, site):
     title_selector, body_selector, quit_after, skip_text, remove, render = selector
 
     r = session.get(url)
     if render:
         r.html.render()
-    if isinstance(title_selector, int):
-        title = url[title_selector:]
+    if site == 'goop':
+        title = is_goop_post(url)
+        if not title:
+            raise ValueError
     else:
-        title = r.html.find(title_selector)[0].text.split('|')[0].strip().replace(' ', '_')
+        if isinstance(title_selector, int):
+            title = url[title_selector:]
+        else:
+            title = r.html.find(title_selector)[0].text.split('|')[0].strip().replace(' ', '_')
 
     body = r.html.find(body_selector)
     if quit_after:
